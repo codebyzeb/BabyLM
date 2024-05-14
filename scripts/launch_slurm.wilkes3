@@ -12,7 +12,7 @@
 #! Name of the job:
 #SBATCH -J baby-lm
 #! Which project should be charged (NB Wilkes2 projects end in '-GPU'):
-#SBATCH -A CAINES-SL2-GPU
+#SBATCH -A COMPUTERLAB-SL2-GPU
 #! How many whole nodes should be allocated?
 #SBATCH --nodes=1
 #! How many (MPI) tasks will there be in total?
@@ -23,9 +23,9 @@
 #SBATCH --exclusive
 
 #! How much wallclock time will be required?
-#SBATCH --time=20:00:00
+#SBATCH --time=00:00:30
 #! What types of email messages do you wish to receive?
-#SBATCH --mail-type=FAIL
+#SBATCH --mail-type=ALL
 #! Uncomment this to prevent the job from being requeued (e.g. if
 #! interrupted by node failure or system downtime):
 ##SBATCH --no-requeue
@@ -66,6 +66,7 @@ export OMP_NUM_THREADS=1
 #! Number of MPI tasks to be started by the application per node and in total (do not change):
 np=$[${numnodes}*${mpi_tasks_per_node}]
 
+CUDA_LAUNCH_BLOCKING=1
 
 ###############################################################
 ### You should not have to change anything below this line ####
@@ -91,10 +92,10 @@ export LOGLEVEL=INFO
 cd ..
 source setup.sh
 
-srun torchrun \
---nnodes 1 \
---nproc_per_node 4 \
---rdzv_id $RANDOM \
---rdzv_backend c10d \
---rdzv_endpoint $head_node_ip:$port_number \
-train.py $@
+#!srun torchrun \
+#!--nnodes 1 \
+#!--nproc_per_node 4 \
+#!--rdzv_id $RANDOM \
+#!--rdzv_backend c10d \
+#!--rdzv_endpoint $head_node_ip:$port_number \
+#!train.py $@

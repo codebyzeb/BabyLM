@@ -1,0 +1,4 @@
+name: 'cambridge-climb/DE-CamBabyTokenizer'  
+
+# optional kwargs that are passed into the tokenizer loading function
+add_prefix_space: True  # better if True, whether to treat first token like any other token (False in GPT-2)

@@ -517,11 +517,16 @@ class CustomTrainer(Trainer):
                 # decode the first 5 inputs
                 data_samples = ""
                 for i in range(5):
-                    data_samples += (
-                        f"{i+1}: "
-                        + self.tokenizer.decode(inputs["input_ids"][i])
-                        + "\n\n"
-                    )
+                    try:
+                        data_samples += (
+                            f"{i+1}: "
+                            + self.tokenizer.decode(inputs["input_ids"][i])
+                            + "\n\n"
+                        )
+                    except IndexError:
+                        print("IndexError occurred while decoding inputs.")
+                        print("Index attempted:", i)
+                        print("Number of input_ids:", len(inputs["input_ids"]))
 
                 if self.data_curriculum_cfg:
                     data_difficulty_percentile = self.callback_handler.train_dataloader.sampler.pacing_fn(  # type: ignore
@@ -651,7 +656,7 @@ class CustomTrainer(Trainer):
             range(
                 self.args.process_index,  # local process rank
                 self.eval_dataset.num_rows,  # type: ignore
-                self.eval_dataset.num_rows // ((100 if self.dry_run else 10_000) // self.args.world_size),  # type: ignore
+                self.eval_dataset.num_rows // ((100 if self.dry_run else 1_000) // self.args.world_size),  # type: ignore
             )
         )
         logging.info("Evaluating perplexity...")

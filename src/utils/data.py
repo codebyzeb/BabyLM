@@ -26,6 +26,16 @@ POS_TAG_MAP = {
     "PRT": 9,
     ".": 10,
     "X": 11,
+    "INTJ":12,
+    "PROPN":13,
+    "ADP":14,
+    "CCONJ":15,
+    "SCONJ":16,
+    "SYM":17,
+    "PUNCT":18,
+    "AUX":19,
+    "PART":20,
+    "ADP":21
 }
 
 
@@ -150,13 +160,17 @@ class DatasetPreprocessor(object):
                         0
                     ].startswith(subword):
                         i += 1
+                    try:
                     # Keep using the POS tag of the current word
-                    pos_tags.append(
-                        POS_TAG_MAP[tag_pairs[i][1]]
-                        if tag_pairs[i][1] in POS_TAG_MAP
-                        else POS_TAG_MAP["X"]
-                    )
-
+                        pos_tags.append(
+                            POS_TAG_MAP[tag_pairs[i][1]]
+                            if tag_pairs[i][1] in POS_TAG_MAP
+                            else POS_TAG_MAP["X"]
+                        )
+                    except Exception as e:
+                        # Print out the tag_pairs variable if an exception occurs
+                        print("Error occurred:", e)
+                        print("tag_pairs variable:", tag_pairs)
             if self.join_sentences:
                 full_tokenized_inputs["input_ids"].extend(
                     tokenized_inputs["input_ids"]

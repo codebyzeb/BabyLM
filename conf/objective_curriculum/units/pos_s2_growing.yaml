@@ -1,0 +1,14 @@
+pos_s2_growing: 
+  task_head_params: {}
+
+  optimizer_params: { 
+    "lr": 1e-3,
+  }
+
+  scheduler_params: {}
+
+  optional_kwargs: { 
+    "pos_tags": ["NOUN","VERB","DET","ADJ","PRON","PROPN","NUM","PRT","AUX","PART","ADP","ADV","PRT"],
+    "mask_probability_pos": 0.4,
+    "mask_probability_other": 0.15,
+  }

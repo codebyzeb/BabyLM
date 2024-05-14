@@ -1,0 +1,16 @@
+defaults:
+  - units:
+    - pos_noun_verb
+    - pos_s1_growing
+    - pos_s2_growing
+    - pos_all
+    - mlm
+
+
+steps: {
+  "pos_noun_verb": [0.0,0.25],
+  "pos_s1_growing": [0.25,0.55],
+  "pos_s2_growing": [0.55,0.75],
+  "pos_all": [0.75,1.0],
+  "mlm": [0.0,1.0],
+}

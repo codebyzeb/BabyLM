@@ -8,7 +8,7 @@ pos_all:
   scheduler_params: {}
 
   optional_kwargs: { 
-    "pos_tags": ["NOUN", "VERB", "ADJ", "ADV", "PRON", "DET", "ADP", "NUM", "CONJ", "PRT", "."],
+    "pos_tags": ["NOUN", "VERB", "ADJ", "ADV", "PRON", "DET", "NUM", "CONJ", "PRT", ".","X","INTJ","PROPN","CCONJ","SCONJ","SYM","PUNCT","AUX","PART","ADP"],
     "mask_probability_pos": 0.4,
     "mask_probability_other": 0.15,
   }

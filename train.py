@@ -219,9 +219,9 @@ def main(cfg: BabyLMConfig):
         max_steps=cfg.trainer.max_training_steps,
         warmup_steps=cfg.trainer.num_warmup_steps,
         seed=cfg.experiment.seed,
-        evaluation_strategy="steps",
-        eval_steps=cfg.trainer.max_training_steps
-        // (2 if cfg.experiment.dry_run else 8),  # eval every 25% of training
+        evaluation_strategy="no", #"steps"
+        #eval_steps=cfg.trainer.max_training_steps
+        #// (2 if cfg.experiment.dry_run else 8),  # eval every 25% of training
         save_steps=cfg.trainer.max_training_steps
         // (
             2 if cfg.experiment.dry_run else 8
@@ -246,9 +246,9 @@ def main(cfg: BabyLMConfig):
         dataloader_drop_last=cfg.data_curriculum
         is not None,  # NOTE: This is to ensure that the curriculum is not broken on the last batch
         remove_unused_columns=False,
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_perplexity_mean",
-        greater_is_better=False,  # smaller perplexity is better
+        #load_best_model_at_end=True,
+        #metric_for_best_model="eval_perplexity_mean",
+        #greater_is_better=False,  # smaller perplexity is better
         ddp_find_unused_parameters=False,
         ddp_timeout=28800,  # 8 hours (default is 30 minutes)
     )
@@ -260,18 +260,19 @@ def main(cfg: BabyLMConfig):
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
+        #eval_dataset=eval_dataset,
         tokenizer=tokenizer,
         curriculum_learning_table=curriculum_learning_table,
     )
 
-    if not cfg.experiment.resume_checkpoint_path:
-        trainer.evaluate()  # Initial model evaluation
+    #if not cfg.experiment.resume_checkpoint_path:
+    #    trainer.evaluate()  # Initial model evaluation
     trainer.train(resume_from_checkpoint=cfg.experiment.resume_checkpoint_path)
 
     # Always evaluate the best model at the end of training, on every metric.
     # Note that passing load_best_model_at_end=True to the trainer will load the best model at
     # the end of training, so we don't need to do it here
+    """
     trainer.eval_glue = True
     trainer.eval_msgs = True
     trainer.eval_blimp = True
@@ -280,6 +281,7 @@ def main(cfg: BabyLMConfig):
         metric_key_prefix="eval_best"
     )  # Note that this will also save the best model in the main output directory
     collect_results(os.path.join(trainer.args.output_dir, "lm_model"))
+    """
 
     trainer.save_model(
         output_dir=os.path.join(training_args.output_dir, "best_model")
